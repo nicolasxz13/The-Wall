@@ -1,0 +1,42 @@
+@using The_Wall.Models
+@model CommentsMessagesViewModel
+
+@await Html.PartialAsync("_Nav")
+<div asp-validation-summary="All" />
+
+@await Html.PartialAsync("_MessageForm", @Model.Newmessage)
+
+@foreach (Message resultmessage in Model.Messages)
+{
+    <div class="messages">
+        <div class="formdelete">
+            <form asp-action="Delete" asp-controller="Message" asp-route-id="@resultmessage.MessageId">
+                <button>X</button>
+            </form>
+        </div>
+        <p class="head">@resultmessage.UserMessage.Name @resultmessage.UserMessage.Last_Name - @resultmessage.CreatedAt</p>
+        <p class="text">@resultmessage.MessageText</p>
+        <div class="comments">
+            @foreach (Comment resultcomment in resultmessage.Comments)
+            {
+                <div class="comment">
+                    <div class="formdelete">
+                        <form asp-action="DeleteComment" asp-controller="Message" asp-route-id="@resultmessage.MessageId" asp-route-commentid="@resultcomment.CommentId">
+                            <button>X</button>
+                        </form>
+                    </div>
+                    <p class="head">@resultcomment.UserComment.Name @resultcomment.UserComment.Last_Name -
+                        @resultcomment.CreatedAt</p>
+                    <p class="text">@resultcomment.CommentText</p>
+                </div>
+            }
+            <div class="comment">
+                @{
+                    ViewData["index"] = @resultmessage.MessageId;
+                }
+                @await Html.PartialAsync("_CommentForm", Model.NewComment, ViewData)
+            </div>
+        </div>
+    </div>
+
+}

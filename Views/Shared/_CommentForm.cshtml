@@ -1,0 +1,13 @@
+@using The_Wall.Models
+@model Comment
+
+@{
+    int index = (int)ViewData["index"];
+}
+
+<form asp-action="CreateComment" asp-controller="Message" asp-route-id="@index" class="commentform">
+    <label asp-for="CommentText"></label>
+    <textarea asp-for="CommentText"></textarea>
+    <span asp-validation-for="CommentText"></span>
+    <button class="btn1 btn3">Comment</button>
+</form>
